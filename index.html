@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Write Better Listings - AI Property Description Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-md">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold text-indigo-600">WriteBetterListings.com</h1>
+                <p class="text-sm text-gray-600">By Chris Kivi - Real Estate Photography serving Western NY & Buffalo</p>
+            </div>
+            <a href="mailto:realtypix360@gmail.com?subject=Book Listing Photos" 
+               class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors whitespace-nowrap">
+                📸 Book Listing Photos
+            </a>
+        </div>
+    </header>
+
+    <div class="max-w-5xl mx-auto p-4 md:p-6 mt-6">
+        <!-- Main Card -->
+        <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-6">
+            <div class="flex items-center gap-3 mb-4">
+                <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                </svg>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800">AI Property Description Generator</h2>
+            </div>
+            <p class="text-gray-600 mb-6">Create compelling property listings with AI-powered descriptions tailored to your audience.</p>
+
+            <!-- Form -->
+            <div id="propertyForm" class="space-y-6">
+                <!-- Basic Info -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Property Type</label>
+                        <select id="propertyType" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            <option value="house">House</option>
+                            <option value="condo">Condo</option>
+                            <option value="townhouse">Townhouse</option>
+                            <option value="apartment">Apartment</option>
+                            <option value="land">Land</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                        <input type="text" id="location" placeholder="e.g., Buffalo, NY" 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Bedrooms</label>
+                        <input type="number" id="bedrooms" placeholder="e.g., 3" 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Bathrooms</label>
+                        <input type="number" step="0.5" id="bathrooms" placeholder="e.g., 2.5" 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Square Footage</label>
+                        <input type="number" id="sqft" placeholder="e.g., 2000" 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Price</label>
+                        <input type="text" id="price" placeholder="e.g., $450,000" 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    </div>
+                </div>
+
+                <!-- Features -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-3">Features & Amenities</label>
+                    <div id="featuresGrid" class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                        <!-- Features will be generated by JS -->
+                    </div>
+                </div>
+
+                <!-- Existing Description -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Existing Description (Optional)</label>
+                    <textarea id="existingDescription" rows="4" 
+                              placeholder="Paste your current property description here if you'd like us to improve it..."
+                              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"></textarea>
+                </div>
+
+                <!-- Generate Button -->
+                <button id="generateBtn" onclick="generateDescriptions()" 
+                        class="w-full bg-indigo-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                    </svg>
+                    Generate Descriptions
+                </button>
+
+                <!-- Error Message -->
+                <div id="errorMsg" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg"></div>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div id="results" class="hidden space-y-4"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white mt-12 py-8 border-t">
+        <div class="max-w-5xl mx-auto px-4 text-center">
+            <p class="text-gray-600 mb-2">Need professional listing photos to go with your descriptions?</p>
+            <a href="mailto:realtypix360@gmail.com?subject=Book Listing Photos" 
+               class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors">
+                Contact Chris Kivi for Real Estate Photography
+            </a>
+            <p class="text-sm text-gray-500 mt-4">Serving Western NY & Buffalo</p>
+        </div>
+    </footer>
+
+    <script>
+        const features = [
+            'Hardwood Floors', 'Granite Countertops', 'Stainless Steel Appliances',
+            'Walk-in Closet', 'Updated Kitchen', 'Updated Bathrooms',
+            'Central Air', 'Fireplace', 'Deck/Patio', 'Backyard',
+            'Garage', 'Pool', 'Home Office', 'Basement',
+            'High Ceilings', 'Natural Light', 'Open Floor Plan',
+            'Smart Home Features', 'Energy Efficient', 'Recently Renovated'
+        ];
+
+        const selectedFeatures = new Set();
+
+        // Generate feature checkboxes
+        const featuresGrid = document.getElementById('featuresGrid');
+        features.forEach(feature => {
+            const label = document.createElement('label');
+            label.className = 'flex items-center space-x-2 cursor-pointer';
+            label.innerHTML = `
+                <input type="checkbox" value="${feature}" onchange="toggleFeature('${feature}')" 
+                       class="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500">
+                <span class="text-sm text-gray-700">${feature}</span>
+            `;
+            featuresGrid.appendChild(label);
+        });
+
+        function toggleFeature(feature) {
+            if (selectedFeatures.has(feature)) {
+                selectedFeatures.delete(feature);
+            } else {
+                selectedFeatures.add(feature);
+            }
+        }
+
+        async function generateDescriptions() {
+            const btn = document.getElementById('generateBtn');
+            const errorMsg = document.getElementById('errorMsg');
+            const results = document.getElementById('results');
+            
+            // Show loading state
+            btn.disabled = true;
+            btn.innerHTML = `
+                <svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Generating Descriptions...
+            `;
+            errorMsg.classList.add('hidden');
+            results.classList.add('hidden');
+
+            try {
+                const propertyDetails = `
+Property Type: ${document.getElementById('propertyType').value}
+Bedrooms: ${document.getElementById('bedrooms').value || 'Not specified'}
+Bathrooms: ${document.getElementById('bathrooms').value || 'Not specified'}
+Square Footage: ${document.getElementById('sqft').value || 'Not specified'}
+Price: ${document.getElementById('price').value || 'Not specified'}
+Location: ${document.getElementById('location').value || 'Not specified'}
+Features: ${Array.from(selectedFeatures).join(', ') || 'None selected'}
+${document.getElementById('existingDescription').value ? `\nExisting Description: ${document.getElementById('existingDescription').value}` : ''}
+                `.trim();
+
+                const prompt = `You are an expert real estate copywriter. Based on the following property details, generate 3 distinct, compelling property descriptions in different styles:
+
+${propertyDetails}
+
+Generate exactly 3 descriptions:
+1. Professional & Detailed - Factual, comprehensive, appeals to serious buyers
+2. Warm & Inviting - Emotional, lifestyle-focused, helps buyers imagine living there
+3. Luxury & Sophisticated - Upscale language, emphasizes premium features and exclusivity
+
+Each description should be 3-4 sentences long and highlight the property's best features. Make them unique from each other in tone and focus.
+
+Format your response as valid JSON with this structure:
+{
+  "descriptions": [
+    {"style": "Professional & Detailed", "text": "description here"},
+    {"style": "Warm & Inviting", "text": "description here"},
+    {"style": "Luxury & Sophisticated", "text": "description here"}
+  ]
+}
+
+Return ONLY the JSON, no other text.`;
+
+                // Call our secure backend API instead of Anthropic directly
+                const response = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        propertyDetails: prompt
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.content && data.content[0] && data.content[0].text) {
+                    const responseText = data.content[0].text.trim();
+                    const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+                    
+                    if (jsonMatch) {
+                        const parsed = JSON.parse(jsonMatch[0]);
+                        displayResults(parsed.descriptions);
+                    } else {
+                        throw new Error('Could not parse response');
+                    }
+                } else {
+                    throw new Error('Invalid response from API');
+                }
+            } catch (err) {
+                console.error(err);
+                errorMsg.textContent = 'Failed to generate descriptions. Please try again.';
+                errorMsg.classList.remove('hidden');
+            } finally {
+                // Reset button
+                btn.disabled = false;
+                btn.innerHTML = `
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                    </svg>
+                    Generate Descriptions
+                `;
+            }
+        }
+
+        function displayResults(descriptions) {
+            const results = document.getElementById('results');
+            results.innerHTML = '';
+            
+            descriptions.forEach((desc, index) => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-xl shadow-lg p-6 fade-in';
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-lg font-semibold text-gray-800">${desc.style}</h3>
+                        <button onclick="copyToClipboard(\`${desc.text}\`, this)" 
+                                class="text-sm bg-indigo-100 text-indigo-700 px-4 py-2 rounded-lg hover:bg-indigo-200 transition-colors">
+                            Copy
+                        </button>
+                    </div>
+                    <p class="text-gray-700 leading-relaxed">${desc.text}</p>
+                `;
+                results.appendChild(card);
+            });
+            
+            results.classList.remove('hidden');
+            results.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function copyToClipboard(text, button) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('bg-green-100', 'text-green-700');
+                button.classList.remove('bg-indigo-100', 'text-indigo-700');
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('bg-green-100', 'text-green-700');
+                    button.classList.add('bg-indigo-100', 'text-indigo-700');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
